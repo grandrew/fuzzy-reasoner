@@ -19,6 +19,7 @@ def recurse(
     rules: frozenset[Rule],
     similarity_func: Optional[SimilarityFunc],
     min_similarity_threshold: float,
+    min_overall_similarity_threshold: float
 ) -> tuple[list[ProofState], list[ProofNode]]:
     """
     Operation corresponding to OR from "end-to-end differentiable proving"
@@ -41,7 +42,10 @@ def recurse(
         if not unify_result:
             continue
         substitutions, similarity = unify_result
-        overall_similarity = min(similarity, proof_state.similarity)
+        # overall_similarity = min(similarity, proof_state.similarity)
+        overall_similarity = similarity * proof_state.similarity
+        if overall_similarity < min_overall_similarity_threshold:
+            continue
         next_proof_state = ProofState(
             similarity=overall_similarity,
             substitutions=substitutions,
@@ -56,6 +60,7 @@ def recurse(
                 rules,
                 similarity_func,
                 min_similarity_threshold,
+                min_overall_similarity_threshold
             )
             if not child_proof_states:
                 continue
@@ -98,6 +103,7 @@ def join(
     rules: frozenset[Rule],
     similarity_func: Optional[SimilarityFunc],
     min_similarity_threshold: float,
+    min_overall_similarity_threshold: float
 ) -> tuple[list[ProofState], list[list[ProofNode]]]:
     """
     Operation corresponding to AND from "end-to-end differentiable proving"
@@ -119,6 +125,7 @@ def join(
         rules,
         similarity_func,
         min_similarity_threshold,
+        min_overall_similarity_threshold
     )
     # if we can't prove the first step of AND, the whole thing fails
     if not recursed_proof_states:
@@ -137,6 +144,7 @@ def join(
             rules,
             similarity_func,
             min_similarity_threshold,
+            min_overall_similarity_threshold
         )
         if not joined_proof_states:
             continue

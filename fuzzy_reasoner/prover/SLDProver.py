@@ -24,10 +24,12 @@ class SLDProver:
         knowledge: Knowledge = [],
         max_proof_depth: int = 10,
         min_similarity_threshold: float = 0.5,
+        min_overall_similarity: float = 0.5,
         similarity_func: Optional[SimilarityFunc] = cosine_similarity,
     ) -> None:
         self.max_proof_depth = max_proof_depth
         self.min_similarity_threshold = min_similarity_threshold
+        self.min_overall_similarity = min_overall_similarity
         self.similarity_func = similarity_func
         self.rules = process_knowledge(knowledge)
 
@@ -57,6 +59,7 @@ class SLDProver:
             rules,
             self.similarity_func,
             self.min_similarity_threshold,
+            self.min_overall_similarity
         )
         if not successful_graph_nodes:
             return []
