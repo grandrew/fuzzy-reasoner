@@ -71,10 +71,7 @@ def unify(
                 next_substitutions,
             )
         else:
-            similarity = min(
-                similarity,
-                adjusted_similarity_func(head_term_resolution, goal_term_resolution),
-            )
+            similarity *= adjusted_similarity_func(head_term_resolution, goal_term_resolution)
             # abort early if the predicate similarity is too low
             if similarity < min_similarity_threshold:
                 return None
