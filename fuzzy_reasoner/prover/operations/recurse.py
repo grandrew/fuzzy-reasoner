@@ -10,6 +10,10 @@ from fuzzy_reasoner.prover.Proof import (
 )
 from fuzzy_reasoner.similarity import SimilarityFunc
 from fuzzy_reasoner.types.Rule import Rule
+from fuzzy_reasoner.meta.stats import SolverStats
+
+
+stats = SolverStats()
 
 
 def recurse(
@@ -92,6 +96,7 @@ def recurse(
                     substitutions=substitutions,
                 )
             )
+        stats.rule_fired(rule)
     return next_proof_states, proof_nodes
 
 
