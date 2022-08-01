@@ -42,7 +42,7 @@ def recurse(
         if not unify_result:
             continue
         substitutions, similarity = unify_result
-        overall_similarity = similarity * proof_state.similarity * 0.95
+        overall_similarity = similarity * proof_state.similarity * 0.98
         if overall_similarity < min_overall_similarity_threshold:
             continue
         next_proof_state = ProofState(
