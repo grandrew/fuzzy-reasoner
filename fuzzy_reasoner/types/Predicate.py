@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 class Predicate:
     symbol: str
     embedding: Optional[Any] = None
+    min_similarity: Optional[float] = None
 
     # shorthand for creating an Atom out of this predicate and terms
     def __call__(self, *terms: Constant | Variable) -> Atom:

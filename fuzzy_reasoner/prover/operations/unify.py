@@ -44,6 +44,12 @@ def unify(
     # abort early if the predicate similarity is too low
     if similarity < min_similarity_threshold:
         return None
+    if (head.predicate.min_similarity is not None and
+        similarity < head.predicate.min_similarity):
+            return None
+    if (goal.statement.predicate.min_similarity is not None and
+        similarity < goal.statement.predicate.min_similarity):
+            return None
 
     for head_term, goal_term in zip(head.terms, goal.statement.terms):
         head_term_resolution = resolve_term(head_term, scope, next_substitutions)
@@ -71,7 +77,15 @@ def unify(
                 next_substitutions,
             )
         else:
-            similarity *= adjusted_similarity_func(head_term_resolution, goal_term_resolution)
+            term_similarity = adjusted_similarity_func(head_term_resolution, goal_term_resolution)
+            if (head_term_resolution.min_similarity is not None and
+                term_similarity < head_term_resolution.min_similarity):
+                return None
+            if (goal_term_resolution.min_similarity is not None and
+                term_similarity < goal_term_resolution.min_similarity):
+                return None
+
+            similarity *= term_similarity
             # abort early if the predicate similarity is too low
             if similarity < min_similarity_threshold:
                 return None
