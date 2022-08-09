@@ -66,7 +66,7 @@ class SolverStats:
                         )
             if len(self.collected_rule_samples) >= 10:
                 for rsample in self.collected_rule_samples:
-                    logger.warning(rsample)
+                    logger.debug(rsample)
                 self.sample_rules.clear()
                 self.collected_rule_samples.clear()
                 self.rule_stats.clear()
